@@ -29,8 +29,8 @@ class ModelPilot {
 
     this.apiKey=validatedConfig.apiKey;
     this.baseURL=validatedConfig.baseURL||'https://modelpilot.co/api';
-    this.routerId=validatedConfig.routerId.
-      this.timeout=validatedConfig.timeout||30000;
+    this.routerId=validatedConfig.routerId;
+    this.timeout=validatedConfig.timeout||30000;
     this.defaultHeaders=validatedConfig.defaultHeaders||{};
     this.maxRetries=validatedConfig.maxRetries||3;
 

@@ -3,6 +3,8 @@
  * Helper functions for the ModelPilot client
  */
 
+const { InvalidRequestError } = require('./errors');
+
 /**
  * Validate client configuration
  * @param {Object} config - Configuration object
@@ -73,7 +75,7 @@ function validateMessages(messages) {
   }
 
   if(messages.length===0) {
-    throw new Error('messages array cannot be empty');
+    throw new InvalidRequestError('messages array cannot be empty','messages');
   }
 
   for(const [index,message] of messages.entries()) {
