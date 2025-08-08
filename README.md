@@ -342,10 +342,9 @@ Check out the [examples directory](./examples/) for more usage examples:
 
 ## 🤝 Support
 
-- 📧 **Email**: support@modelpilot.com
-- 📖 **Documentation**: https://docs.modelpilot.com
-- 🐛 **Issues**: https://github.com/modelpilot/modelpilot-js/issues
-- 💬 **Discord**: https://discord.gg/modelpilot
+- 📧 **Email**: help@modelpilot.co
+- 📖 **Documentation**: https://docs.modelpilot.co
+- 🐛 **Issues**: https://github.com/aposded/modelpilot-js/issues
 
 ## 📝 License
 
@@ -353,7 +352,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 🔗 Links
 
-- [ModelPilot Platform](https://modelpilot.com)
-- [API Documentation](https://docs.modelpilot.com)
-- [GitHub Repository](https://github.com/modelpilot/modelpilot-js)
+- [ModelPilot Platform](https://modelpilot.co)
+- [API Documentation](https://docs.modelpilot.co)
+- [GitHub Repository](https://github.com/aposded/modelpilot-js)
 - [npm Package](https://www.npmjs.com/package/modelpilot)

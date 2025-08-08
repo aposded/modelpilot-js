@@ -44,10 +44,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/modelpilot/modelpilot-js.git"
+    "url": "https://github.com/aposded/modelpilot-js"
   },
   "bugs": {
-    "url": "https://github.com/modelpilot/modelpilot-js/issues"
+    "url": "https://github.com/aposded/modelpilot-js/issues"
   },
   "dependencies": {
     "axios": "^1.6.0",

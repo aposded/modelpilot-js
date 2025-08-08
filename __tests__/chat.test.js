@@ -2,35 +2,35 @@
  * Tests for ModelPilot Chat Completions API
  */
 
-const axios = require('axios');
-const ModelPilot = require('../src/index');
-const { ChatCompletions, ChatCompletionStream } = require('../src/chat');
-const { InvalidRequestError } = require('../src/errors');
+const axios=require('axios');
+const ModelPilot=require('../src/index');
+const {ChatCompletions,ChatCompletionStream}=require('../src/chat');
+const {InvalidRequestError}=require('../src/errors');
 
 // Mock axios
 jest.mock('axios');
-const mockedAxios = axios;
+const mockedAxios=axios;
 
-describe('ChatCompletions', () => {
+describe('ChatCompletions',() => {
   let client;
   let chat;
 
   beforeEach(() => {
-    client = new ModelPilot({
+    client=new ModelPilot({
       apiKey: 'test-api-key',
-      baseURL: 'https://test.modelpilot.com'
+      baseURL: 'https://test.modelpilot.co'
     });
-    chat = client.chat;
+    chat=client.chat;
     jest.clearAllMocks();
   });
 
-  describe('create', () => {
-    const validMessages = [
-      { role: 'user', content: 'Hello!' }
+  describe('create',() => {
+    const validMessages=[
+      {role: 'user',content: 'Hello!'}
     ];
 
-    it('should create basic chat completion', async () => {
-      const mockResponse = {
+    it('should create basic chat completion',async () => {
+      const mockResponse={
         id: 'chatcmpl-123',
         object: 'chat.completion',
         created: 1677652288,
@@ -57,7 +57,7 @@ describe('ChatCompletions', () => {
 
       mockedAxios.mockResolvedValue(testUtils.createMockResponse(mockResponse));
 
-      const completion = await chat.create({
+      const completion=await chat.create({
         messages: validMessages,
         max_tokens: 100
       });
@@ -76,20 +76,20 @@ describe('ChatCompletions', () => {
       );
     });
 
-    it('should validate required messages parameter', async () => {
+    it('should validate required messages parameter',async () => {
       await expect(chat.create({})).rejects.toThrow(InvalidRequestError);
-      await expect(chat.create({ messages: null })).rejects.toThrow(InvalidRequestError);
+      await expect(chat.create({messages: null})).rejects.toThrow(InvalidRequestError);
     });
 
-    it('should validate messages format', async () => {
-      await expect(chat.create({ messages: 'invalid' })).rejects.toThrow('messages must be an array');
-      await expect(chat.create({ messages: [] })).rejects.toThrow('messages array cannot be empty');
-      await expect(chat.create({ 
-        messages: [{ role: 'invalid', content: 'test' }] 
+    it('should validate messages format',async () => {
+      await expect(chat.create({messages: 'invalid'})).rejects.toThrow('messages must be an array');
+      await expect(chat.create({messages: []})).rejects.toThrow('messages array cannot be empty');
+      await expect(chat.create({
+        messages: [{role: 'invalid',content: 'test'}]
       })).rejects.toThrow('role must be one of');
     });
 
-    it('should validate optional parameters', async () => {
+    it('should validate optional parameters',async () => {
       await expect(chat.create({
         messages: validMessages,
         max_tokens: -1
@@ -106,19 +106,19 @@ describe('ChatCompletions', () => {
       })).rejects.toThrow('top_p must be between 0 and 1');
     });
 
-    it('should handle function calling', async () => {
-      const functions = [{
+    it('should handle function calling',async () => {
+      const functions=[{
         name: 'get_weather',
         description: 'Get weather',
         parameters: {
           type: 'object',
           properties: {
-            location: { type: 'string' }
+            location: {type: 'string'}
           }
         }
       }];
 
-      const mockResponse = {
+      const mockResponse={
         choices: [{
           message: {
             role: 'assistant',
@@ -133,7 +133,7 @@ describe('ChatCompletions', () => {
 
       mockedAxios.mockResolvedValue(testUtils.createMockResponse(mockResponse));
 
-      const completion = await chat.create({
+      const completion=await chat.create({
         messages: validMessages,
         functions,
         function_call: 'auto'
@@ -150,8 +150,8 @@ describe('ChatCompletions', () => {
       );
     });
 
-    it('should handle tools (modern function calling)', async () => {
-      const tools = [{
+    it('should handle tools (modern function calling)',async () => {
+      const tools=[{
         type: 'function',
         function: {
           name: 'calculate',
@@ -159,14 +159,14 @@ describe('ChatCompletions', () => {
           parameters: {
             type: 'object',
             properties: {
-              expression: { type: 'string' }
+              expression: {type: 'string'}
             }
           }
         }
       }];
 
       mockedAxios.mockResolvedValue(testUtils.createMockResponse({
-        choices: [{ message: { role: 'assistant', content: 'Result: 42' } }]
+        choices: [{message: {role: 'assistant',content: 'Result: 42'}}]
       }));
 
       await chat.create({
@@ -185,7 +185,7 @@ describe('ChatCompletions', () => {
       );
     });
 
-    it('should validate functions parameter', async () => {
+    it('should validate functions parameter',async () => {
       await expect(chat.create({
         messages: validMessages,
         functions: 'invalid'
@@ -193,11 +193,11 @@ describe('ChatCompletions', () => {
 
       await expect(chat.create({
         messages: validMessages,
-        functions: [{ description: 'Missing name' }]
+        functions: [{description: 'Missing name'}]
       })).rejects.toThrow('name is required');
     });
 
-    it('should validate tools parameter', async () => {
+    it('should validate tools parameter',async () => {
       await expect(chat.create({
         messages: validMessages,
         tools: 'invalid'
@@ -205,16 +205,16 @@ describe('ChatCompletions', () => {
 
       await expect(chat.create({
         messages: validMessages,
-        tools: [{ function: { name: 'test' } }]
+        tools: [{function: {name: 'test'}}]
       })).rejects.toThrow('type is required');
     });
   });
 
-  describe('streaming', () => {
-    it('should handle streaming completions', async () => {
-      const mockStream = {
+  describe('streaming',() => {
+    it('should handle streaming completions',async () => {
+      const mockStream={
         data: {
-          [Symbol.asyncIterator]: async function* () {
+          [Symbol.asyncIterator]: async function*() {
             yield Buffer.from('data: {"choices":[{"delta":{"content":"Hello"}}]}\n\n');
             yield Buffer.from('data: {"choices":[{"delta":{"content":" world"}}]}\n\n');
             yield Buffer.from('data: [DONE]\n\n');
@@ -224,8 +224,8 @@ describe('ChatCompletions', () => {
 
       mockedAxios.mockResolvedValue(mockStream);
 
-      const stream = await chat.create({
-        messages: [{ role: 'user', content: 'Hello!' }],
+      const stream=await chat.create({
+        messages: [{role: 'user',content: 'Hello!'}],
         stream: true
       });
 
@@ -245,20 +245,20 @@ describe('ChatCompletions', () => {
   });
 });
 
-describe('ChatCompletionStream', () => {
-  it('should iterate through stream chunks', async () => {
-    const mockStream = {
-      [Symbol.asyncIterator]: async function* () {
+describe('ChatCompletionStream',() => {
+  it('should iterate through stream chunks',async () => {
+    const mockStream={
+      [Symbol.asyncIterator]: async function*() {
         yield Buffer.from('data: {"choices":[{"delta":{"content":"Hello"}}]}\n\n');
         yield Buffer.from('data: {"choices":[{"delta":{"content":" world"}}]}\n\n');
         yield Buffer.from('data: [DONE]\n\n');
       }
     };
 
-    const stream = new ChatCompletionStream(mockStream);
-    const chunks = [];
+    const stream=new ChatCompletionStream(mockStream);
+    const chunks=[];
 
-    for await (const chunk of stream) {
+    for await(const chunk of stream) {
       chunks.push(chunk);
     }
 
@@ -266,17 +266,17 @@ describe('ChatCompletionStream', () => {
     expect(chunks[0].choices[0].delta.content).toBeDefined();
   });
 
-  it('should convert stream to text', async () => {
-    const mockStream = {
-      [Symbol.asyncIterator]: async function* () {
+  it('should convert stream to text',async () => {
+    const mockStream={
+      [Symbol.asyncIterator]: async function*() {
         yield Buffer.from('data: {"choices":[{"delta":{"content":"Hello"}}]}\n\n');
         yield Buffer.from('data: {"choices":[{"delta":{"content":" world"}}]}\n\n');
         yield Buffer.from('data: [DONE]\n\n');
       }
     };
 
-    const stream = new ChatCompletionStream(mockStream);
-    const text = await stream.getText();
+    const stream=new ChatCompletionStream(mockStream);
+    const text=await stream.getText();
 
     expect(text).toBe('Hello world');
   });

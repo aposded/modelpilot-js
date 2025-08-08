@@ -28,15 +28,20 @@ class ModelPilot {
     const validatedConfig=validateConfig(config);
 
     this.apiKey=validatedConfig.apiKey;
-    this.baseURL=validatedConfig.baseURL||'https://your-firebase-project.cloudfunctions.net';
-    this.routerId=validatedConfig.routerId||'default';
-    this.timeout=validatedConfig.timeout||30000;
+    this.baseURL=validatedConfig.baseURL||'https://modelpilot.co/api';
+    this.routerId=validatedConfig.routerId.
+      this.timeout=validatedConfig.timeout||30000;
     this.defaultHeaders=validatedConfig.defaultHeaders||{};
     this.maxRetries=validatedConfig.maxRetries||3;
 
     // Validate API key format
     if(!this.apiKey.startsWith('mp_')) {
       throw new Error('Invalid ModelPilot API key format. API key must start with "mp_". Get your API key from https://modelpilot.co');
+    }
+
+    // Validate Router ID
+    if(!this.routerId) {
+      throw new Error('Router ID is required. Get your Router ID from https://modelpilot.co');
     }
 
     // Initialize API sections
