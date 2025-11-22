@@ -1,4 +1,4 @@
-module.exports = {
+module.exports={
   env: {
     node: true,
     es2021: true,
@@ -12,11 +12,11 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    'indent': ['error', 2],
-    'linebreak-style': ['error', 'unix'],
-    'quotes': ['error', 'single'],
-    'semi': ['error', 'always'],
-    'no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],
+    'indent': ['error',2,{'SwitchCase': 1}],
+    'linebreak-style': ['error','unix'],
+    'quotes': ['error','single'],
+    'semi': ['error','always'],
+    'no-unused-vars': ['error',{'argsIgnorePattern': '^_'}],
     'no-console': 'off',
     'prefer-const': 'error',
     'no-var': 'error'

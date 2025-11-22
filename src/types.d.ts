@@ -90,7 +90,10 @@ export interface ChatCompletionCreateParams {
   /** Tool definitions */
   tools?: Tool[];
   /** Tool choice behavior */
-  tool_choice?: 'none' | 'auto' | { type: 'function'; function: { name: string } };
+  tool_choice?:
+    | 'none'
+    | 'auto'
+    | { type: 'function'; function: { name: string } };
   /** Response format specification */
   response_format?: { type: 'text' | 'json_object' };
   /** User identifier */
@@ -103,7 +106,13 @@ export interface ChatCompletionChoice {
   /** Message content */
   message: ChatMessage;
   /** Finish reason */
-  finish_reason: 'stop' | 'length' | 'function_call' | 'tool_calls' | 'content_filter' | null;
+  finish_reason:
+    | 'stop'
+    | 'length'
+    | 'function_call'
+    | 'tool_calls'
+    | 'content_filter'
+    | null;
 }
 
 export interface ChatCompletionUsage {
@@ -156,7 +165,13 @@ export interface ChatCompletionChunk {
   choices: Array<{
     index: number;
     delta: Partial<ChatMessage>;
-    finish_reason: 'stop' | 'length' | 'function_call' | 'tool_calls' | 'content_filter' | null;
+    finish_reason:
+      | 'stop'
+      | 'length'
+      | 'function_call'
+      | 'tool_calls'
+      | 'content_filter'
+      | null;
   }>;
 }
 
@@ -221,24 +236,30 @@ export class ChatCompletionStream {
 
 // Chat completions API
 export class ChatCompletions {
-  create(params: ChatCompletionCreateParams & { stream?: false }): Promise<ChatCompletionResponse>;
-  create(params: ChatCompletionCreateParams & { stream: true }): Promise<ChatCompletionStream>;
-  create(params: ChatCompletionCreateParams): Promise<ChatCompletionResponse | ChatCompletionStream>;
+  create(
+    params: ChatCompletionCreateParams & { stream?: false }
+  ): Promise<ChatCompletionResponse>;
+  create(
+    params: ChatCompletionCreateParams & { stream: true }
+  ): Promise<ChatCompletionStream>;
+  create(
+    params: ChatCompletionCreateParams
+  ): Promise<ChatCompletionResponse | ChatCompletionStream>;
 }
 
 // Main client class
 export class ModelPilot {
   constructor(config: ModelPilotConfig);
-  
+
   /** Chat completions API */
   chat: ChatCompletions;
-  
+
   /** Make authenticated request */
   request(endpoint: string, options?: any): Promise<any>;
-  
+
   /** Get router configuration */
   getRouterConfig(): Promise<RouterConfig>;
-  
+
   /** Get available models */
   getModels(): Promise<Model[]>;
 }

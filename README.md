@@ -1,76 +1,83 @@
-# ModelPilot JavaScript/TypeScript Library
+# ModelPilot JavaScript/TypeScript Client
 
-[![npm version](https://badge.fury.io/js/modelpilot.svg)](https://www.npmjs.com/package/modelpilot)
+OpenAI-compatible JavaScript/TypeScript client for ModelPilot's intelligent AI model routing.
+
+[![npm version](https://badge.fury.io/js/modelpilot-js.svg)](https://www.npmjs.com/package/modelpilot-js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-The official JavaScript/TypeScript library for the ModelPilot API. Provides an **OpenAI-compatible interface** with intelligent model routing, cost optimization, and advanced features.
+## Features
+
+- **OpenAI-Compatible API**: Drop-in replacement for OpenAI SDK
+- **Intelligent Model Routing**: Automatic model selection based on cost, speed, and quality
+- **Multi-Provider Support**: Access OpenAI, Anthropic, Google, and 100+ models
+- **Cost Optimization**: Significant savings on AI costs through smart routing
+- **Function Calling**: Full support for tools and function calling
+- **Streaming Responses**: Real-time streaming with async iterators
+- **TypeScript Support**: Full type definitions included
+- **Rich Metadata**: Cost, latency, and model selection information
+
+## Two Ways to Use ModelPilot
+
+### Method 1: ModelPilot-JS SDK (Recommended)
+
+```javascript
+const ModelPilot = require('modelpilot-js');
+
+const client = new ModelPilot({
+  apiKey: 'mp_your_api_key',
+  routerId: 'your_router_id'
+});
+```
+
+### Method 2: OpenAI SDK with Modified BaseURL
+
+```javascript
+const { OpenAI } = require('openai');
+
+const client = new OpenAI({
+  apiKey: 'mp_your_api_key', // Use ModelPilot API key
+  baseURL: 'https://modelpilot.co/api/router/your_router_id'
+});
+```
+
+Both methods work identically - use whichever fits your project better!
+
+## Installation
+
+```bash
+npm install modelpilot-js
+# or
+yarn add modelpilot-js
+# or for OpenAI SDK method
+npm install openai
+```
 
 ## 🚀 Quick Start
 
-### Installation
-
-```bash
-npm install modelpilot
-```
-
-### Basic Usage
-
 ```javascript
-const ModelPilot = require('modelpilot');
+const ModelPilot = require('modelpilot-js');
 
-const mp = new ModelPilot({
+const client = new ModelPilot({
   apiKey: process.env.MODELPILOT_API_KEY, // Get from https://modelpilot.co
+  routerId: process.env.MODELPILOT_ROUTER_ID
 });
 
-const completion = await mp.chat.create({
+const completion = await client.chat.create({
   messages: [
     { role: 'system', content: 'You are a helpful assistant.' },
     { role: 'user', content: 'What is the capital of France?' },
   ],
+  temperature: 0.7,
   max_tokens: 100,
 });
 
 console.log(completion.choices[0].message.content);
+
+// Access ModelPilot metadata
+console.log('Model used:', completion._meta?.modelUsed);
+console.log('Cost:', completion._meta?.cost);
+console.log('Latency:', completion._meta?.latency);
 ```
-
-## 🔄 Migrating from OpenAI
-
-ModelPilot provides a **drop-in replacement** for the OpenAI library with minimal code changes:
-
-### Before (OpenAI)
-
-```javascript
-const OpenAI = require('openai');
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-const completion = await openai.chat.completions.create({
-  model: 'gpt-4',
-  messages: [{ role: 'user', content: 'Hello!' }],
-});
-```
-
-### After (ModelPilot)
-
-```javascript
-const ModelPilot = require('modelpilot');
-const mp = new ModelPilot({
-  apiKey: process.env.MODELPILOT_API_KEY,
-  routerId: 'YOUR_ROUTER_ID',
-});
-
-const completion = await mp.chat.create({
-  // model: 'gpt-4', // Optional - ModelPilot chooses the best model!
-  messages: [{ role: 'user', content: 'Hello!' }],
-});
-```
-
-**That's it!** Your existing OpenAI code works with minimal changes, plus you get:
-
-- ✨ **Intelligent model routing** - Automatically selects the best model for each request
-- 💰 **Cost optimization** - Reduces API costs by up to 70%
-- 🚀 **Performance optimization** - Routes to fastest models when needed
-- 🔄 **Automatic fallbacks** - Seamless failover if a model is unavailable
-- 📊 **Advanced analytics** - Detailed metrics and insights
 
 ## 📚 Features
 
@@ -78,7 +85,7 @@ const completion = await mp.chat.create({
 
 ```javascript
 // Basic completion
-const completion = await mp.chat.create({
+const completion = await client.chat.create({
   messages: [
     { role: 'system', content: 'You are a helpful assistant.' },
     { role: 'user', content: 'Explain quantum computing.' },
@@ -88,7 +95,7 @@ const completion = await mp.chat.create({
 });
 
 // Streaming
-const stream = await mp.chat.create({
+const stream = await client.chat.create({
   messages: [{ role: 'user', content: 'Write a story.' }],
   stream: true,
 });

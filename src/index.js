@@ -74,6 +74,7 @@ class ModelPilot {
    * Handle HTTP errors and convert to ModelPilot errors
    * @private
    */
+  // 
   _handleError(error) {
     if(error.response) {
       const {status,data}=error.response;
